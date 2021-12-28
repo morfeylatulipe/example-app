@@ -1,6 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
+use App\Facades\Greeting;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +18,17 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/greeting/{name?}', function (?string $name = null) {
+    return Response::json([
+        'Greeting::toGreet()' => Greeting::toGreet(),
+        'Greeting::toGreet(null)' => Greeting::toGreet(null),
+        'Greeting::toGreet(greeting: null)' => Greeting::toGreet(greeting: null),
+        'Greeting::toGreet(null, null)' => Greeting::toGreet(null, null),
+        'Greeting::toGreet(greeting: null, whom: null)' => Greeting::toGreet(greeting: null, whom: null),
+        'Greeting::toGreet($name)' => Greeting::toGreet($name),
+        'Greeting::toGreet(greeting: \'Hi\')' => Greeting::toGreet(greeting: 'Hi'),
+        'Greeting::toGreet($name, \'Hi\')' => Greeting::toGreet($name, 'Hi'),
+        'Greeting::toGreet(greeting: \'Hi\', whom: $name)' => Greeting::toGreet(greeting: 'Hi', whom: $name),
+    ], options: JSON_PRETTY_PRINT);
+})->whereAlpha('name');
